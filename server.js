@@ -24,13 +24,15 @@ const preparePageForTests = async (page) => {
 
 app.get('/updateFiles',async(req,res)=>{
     await (async () => {
+
+        var dir = __dirname+'/images/'
+        !fs.existsSync(dir) && fs.mkdirSync(dir);
         
         for(let i = 0; i < MyProjects.length; i++){
             var name = MyProjects[i].name;
             var url = MyProjects[i].url;
             try{
                 if(!fs.existsSync(__dirname+'/images/'+name)){
-                    console.log(__dirname+'/images/'+name)
                     const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
                     const page = await browser.newPage();
                     await page.goto(url);

@@ -45,11 +45,32 @@ await (async () => {
 })();
 
 app.get('/projects',async(req, res)=>{
-    var response = [];
+
+    let response = [];
+    let file;
+
+    if(fs.existsSync(__dirname + '/projects.json')){
+        file = fs.readFileSync('projects.json')
+        file = JSON.parse(file)
+    }
+
     try{
         for(let i = 0; i < MyProjects.length; i++){
             var name = MyProjects[i].name;
             var url = MyProjects[i].url;
+
+            if(file){
+                let exists = false;
+                for(let x = 0; x < file.length; x++){
+                    if(file[x] && file[x].image === name){
+                        response.push(file[x]);
+                        exists = true;
+                        break;
+                    }
+                }
+                if(exists) continue;
+            }
+
             if(fs.existsSync(__dirname+'/images/'+name)){
 
                 const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
@@ -73,6 +94,11 @@ app.get('/projects',async(req, res)=>{
             }
         }
     } catch(err){console.log(err)}
+
+    fs.writeFile('projects.json', JSON.stringify(response), function (err) {
+        if (err) return console.log(err);
+    });
+
     res.json(response)
 })
 

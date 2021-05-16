@@ -1,0 +1,20 @@
+{
+  "name": "brennonaleatorioapi",
+  "version": "1.0.0",
+  "description": "API para o site https://brennonaleatorio.com.br",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Brennon-Oliveira/brennonaleatorioapi"
+  },
+  "author": "Brennon Gabriel de Oliveira",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "puppeteer": "^9.1.1"
+  }
+}

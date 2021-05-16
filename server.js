@@ -54,7 +54,7 @@ app.get('/projects',async(req, res)=>{
             var url = MyProjects[i].url;
             if(fs.existsSync(__dirname+'/images/'+name)){
 
-                const browser = await puppeteer.launch({headless: true});
+                const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
                 const page = await browser.newPage();
 
                 await preparePageForTests(page);

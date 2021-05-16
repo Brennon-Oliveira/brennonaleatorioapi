@@ -7,7 +7,7 @@ import cors from 'cors';
 
 const app = express();
 const __dirname = path.resolve(path.dirname(''));
-const PORT = Process.env.PORT || 3000;
+const PORT = 3000;
 const MyProjects = [
     {url: 'http://brennonaleatorio.com.br',name:'brennonaleatorio.png'},
     {url: 'https://www.hilbertfirearms.com.br/',name:'hilbertfirearms.png'},

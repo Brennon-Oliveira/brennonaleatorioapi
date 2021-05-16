@@ -22,29 +22,27 @@ const preparePageForTests = async (page) => {
     await page.setUserAgent(userAgent);
 }
 
-app.get('/updateFiles',async(req,res)=>{
-    await (async () => {
 
-        var dir = __dirname+'/images/'
-        !fs.existsSync(dir) && fs.mkdirSync(dir);
-        
-        for(let i = 0; i < MyProjects.length; i++){
-            var name = MyProjects[i].name;
-            var url = MyProjects[i].url;
-            try{
-                if(!fs.existsSync(__dirname+'/images/'+name)){
-                    const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
-                    const page = await browser.newPage();
-                    await page.goto(url);
-                    await page.screenshot({path: 'images/'+name});
-                    await browser.close();
-                    
-                }
-            } catch(err){console.log(err)}
-        }
-    })();
-    res.json({status:'sucess'});
-})
+await (async () => {
+
+    var dir = __dirname+'/images/'
+    !fs.existsSync(dir) && fs.mkdirSync(dir);
+    
+    for(let i = 0; i < MyProjects.length; i++){
+        var name = MyProjects[i].name;
+        var url = MyProjects[i].url;
+        try{
+            if(!fs.existsSync(__dirname+'/images/'+name)){
+                const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
+                const page = await browser.newPage();
+                await page.goto(url);
+                await page.screenshot({path: 'images/'+name});
+                await browser.close();
+                
+            }
+        } catch(err){console.log(err)}
+    }
+})();
 
 app.get('/projects',async(req, res)=>{
     var response = [];

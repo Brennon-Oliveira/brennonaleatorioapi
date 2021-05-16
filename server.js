@@ -49,11 +49,27 @@ app.get('/projects',async(req, res)=>{
     try{
         for(let i = 0; i < MyProjects.length; i++){
             var name = MyProjects[i].name;
+            var url = MyProjects[i].url;
             if(fs.existsSync(__dirname+'/images/'+name)){
 
+                const browser = await puppeteer.launch({headless: true});
+                const page = await browser.newPage();
 
+                await preparePageForTests(page);
+                await page.goto(url);
 
-                response.push({image:name})
+                const data = await page.evaluate(()=>{
+                    var description = document.querySelector('meta[name="description"]').content;
+                    description = description===''? 'Site ainda sem descrição': description;
+                    var title = document.querySelector('title').innerHTML;
+            
+                    const list = {title: title, description: description };
+            
+                    return list;
+                })
+                await browser.close();
+
+                response.push({url:url, ...data, image:name})
             }
         }
     } catch(err){console.log(err)}
@@ -62,7 +78,13 @@ app.get('/projects',async(req, res)=>{
 
 app.get('/images/:name',(req, res)=>{
     var name = req.params.name;
-    res.sendFile(__dirname+'/buddy-screenshot.png');
+    try{
+        if(fs.existsSync(__dirname+'/images/'+name)){
+            res.sendFile(__dirname+'/images/'+name);
+        }else {
+            res.json({error:true})
+        }
+    } catch(err){console.log(err)}
 })
 
 app.listen(PORT,()=>{

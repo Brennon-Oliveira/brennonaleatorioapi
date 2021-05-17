@@ -12,6 +12,9 @@ const MyProjects = [
     {url: 'http://brennonaleatorio.com.br',name:'brennonaleatorio.png'},
     {url: 'https://www.hilbertfirearms.com.br/',name:'hilbertfirearms.png'},
     {url: 'https://hogwartshmrpg.netlify.app/',name:'hogwartshmrpg.png'},
+    {url: 'http://projetos.brennonaleatorio.com.br/little-invest/',name:'littleinvest.png'},
+    {url: 'http://projetos.brennonaleatorio.com.br/DiaDaMulher/',name:'DiaDaMulher.png'},
+    {url: 'http://projetos.brennonaleatorio.com.br/Monguilhott/',name:'Monguilhott.png'},
 ];
 
 app.use(cors())

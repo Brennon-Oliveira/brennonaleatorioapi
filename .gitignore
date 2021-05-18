@@ -3,6 +3,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=node
 images/
 projects.json
+currículo.pdf
 
 ### Node ###
 # Logs

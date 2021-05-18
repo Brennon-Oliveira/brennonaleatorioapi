@@ -4,6 +4,8 @@ import puppeteer from 'puppeteer';
 import path from 'path';
 import fs from 'fs';
 import cors from 'cors';
+import pdf from 'pdf-creator-node';
+import resumeInfo from './resumeInfo.js';
 
 const app = express();
 const __dirname = path.resolve(path.dirname(''));
@@ -25,6 +27,15 @@ const preparePageForTests = async (page) => {
     await page.setUserAgent(userAgent);
 }
 
+async function getTemplateHtml() {
+    console.log("Loading template file in memory")
+    try {
+        const invoicePath = path.resolve("./invoice.html");
+        return await readFile(invoicePath, 'utf8');
+    } catch (err) {
+        return Promise.reject("Could not load html template");
+    }
+}
 
 await (async () => {
 
@@ -114,6 +125,40 @@ app.get('/images/:name',(req, res)=>{
             res.json({error:true})
         }
     } catch(err){console.log(err)}
+})
+
+app.get('/resume/:isPdf?',async(req,res)=>{
+    let isPdf = req.params.isPdf;
+    if(!isPdf){
+        res.json(resumeInfo);
+        return;
+    }
+
+    var resume = await fs.readFileSync("pdf.html", "utf8");
+
+    var options = {
+        format: "A3",
+        orientation: "portrait",
+        border: "10mm",
+    };
+    var document = {
+        html: resume,
+        data: resumeInfo,
+        path: "./currículo.pdf",
+        type: "",
+    };
+
+    await pdf
+    .create(document, options)
+    .then((res) => {
+        console.log(res);
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+    
+    res.sendfile('./currículo.pdf');
+
 })
 
 app.listen(PORT,()=>{

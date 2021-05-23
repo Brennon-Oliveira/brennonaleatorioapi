@@ -6,6 +6,7 @@ import fs from 'fs';
 import cors from 'cors';
 import pdf from 'pdf-creator-node';
 import resumeInfo from './resumeInfo.js';
+import { zip } from 'zip-a-folder';
 
 const app = express();
 const __dirname = path.resolve(path.dirname(''));
@@ -57,6 +58,13 @@ await (async () => {
         } catch(err){console.log(err)}
     }
 })();
+
+app.get('/downloadImages',async(req,res)=>{
+    if(!fs.existsSync(__dirname + '/images.zip')){
+        await zip(__dirname + '/images', __dirname + '/images.zip');
+    }
+    res.sendFile(__dirname+'/images.zip');
+})
 
 app.get('/projects',async(req, res)=>{
 

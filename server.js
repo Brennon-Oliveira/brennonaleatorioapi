@@ -6,7 +6,7 @@ import fs from 'fs';
 import axios from 'axios';
 import cheerio from 'cheerio';
 import cors from 'cors';
-import pdf from 'pdf-creator-node';
+import pdf from 'pdf-creator-node'
 import resumeInfo from './resumeInfo.js';
 import { zip } from 'zip-a-folder';
 
@@ -66,6 +66,16 @@ app.get('/newBot',async(req, res)=>{
 
 })
 
+app.get('/reset',(req,res)=>{
+    if(fs.existsSync(__dirname + '/currículo.pdf')){
+        fs.rmSync(__dirname + '/currículo.pdf');
+    }
+    if(fs.existsSync(__dirname + '/projects.json')){
+        fs.rmSync(__dirname + '/projects.json');
+    }
+    res.send('Reset')
+})
+
 app.get('/projects',async(req, res)=>{
 
     let response = [];
@@ -120,6 +130,11 @@ app.get('/resume/:isPdf?',async(req,res)=>{
         return;
     }
 
+    if(fs.existsSync(__dirname + '/currículo.pdf')){
+        res.sendFile(__dirname + '/currículo.pdf');
+        return;
+    }
+
     var resume = await fs.readFileSync("pdf.html", "utf8");
 
     var options = {
@@ -143,6 +158,7 @@ app.get('/resume/:isPdf?',async(req,res)=>{
         console.error(error);
     });
     
+    await new Promise(r => setTimeout(r, 2000));;
     res.sendFile(__dirname + '/currículo.pdf');
 
 })

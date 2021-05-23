@@ -14,7 +14,7 @@ const app = express();
 const __dirname = path.resolve(path.dirname(''));
 const PORT = process.env.PORT || 5000;
 const MyProjects = [
-    {url: 'http://brennonaleatorio.com.br',name:'brennonaleatorio.png'},
+    {url: 'https://brennonaleatorio.com.br',name:'brennonaleatorio.png'},
     {url: 'https://www.hilbertfirearms.com.br/',name:'hilbertfirearms.png'},
     {url: 'https://hogwartshmrpg.netlify.app/',name:'hogwartshmrpg.png'},
     {url: 'http://projetos.brennonaleatorio.com.br/little-invest/',name:'littleinvest.png'},
@@ -61,8 +61,8 @@ app.get('/newBot',async(req, res)=>{
 
     response.push($('meta').attr('href'));
 
-    console.log($('meta[name="description"]').attr('content'));
-    res.json({'ola':response})
+    console.log($('title').first().text());
+    res.json({'ola':'response'})
 
 })
 
@@ -92,26 +92,14 @@ app.get('/projects',async(req, res)=>{
                 }
                 if(exists) continue;
             }
-                // const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
-                // const page = await browser.newPage();
-
-                // await preparePageForTests(page);
-                // await page.goto(url);
-
-                // const data = await page.evaluate(()=>{
-                //     var description = document.querySelector('meta[name="description"]').content;
-                //     description = description===''? 'Site ainda sem descrição': description;
-                //     var title = document.querySelector('title').innerHTML;
-            
-                //     const list = {title: title, description: description };
-                // })
-                // await browser.close();
 
                 let html = await axios.get(url);
 
                 const $ = await cheerio.load(html.data);
-                let description = $('meta[name="description"]').attr('content') ? $('meta[name="description"]').attr('content') : 'Site ainda sem descrição';
-                let title = $('title').text();
+                let description = $('meta[name="description"]').first().attr('content') ? $('meta[name="description"]').first().attr('content') : 'Site ainda sem descrição';
+                let title = $('title').first().text();
+
+                console.log(title);
                 
                 response.push({url, title, description, image:name})
         }

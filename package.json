@@ -16,6 +16,8 @@
   "author": "Brennon Gabriel de Oliveira",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
+    "cheerio": "*",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "pdf-creator-node": "^2.2.2",

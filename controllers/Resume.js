@@ -13,8 +13,8 @@ class Resume {
             state: "Solteiro",
             age: 17,
             email: "brennonoliveira20014@gmail.com",
-            number: "42999017838",
-            goals: "Atuar como Desenvolvedor Web",
+            number: "+55 (42) 99901-7838",
+            goals: "Atuar como Desenvolvedor",
             formation: [
                 "Ensino Médio. Padre Pedro Grzelczak, previsão de conclusão em 2021.",
             ],

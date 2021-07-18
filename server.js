@@ -1,168 +1,183 @@
-
-import express from 'express';
-import puppeteer from 'puppeteer';
-import path from 'path';
-import fs from 'fs';
-import axios from 'axios';
-import cheerio from 'cheerio';
-import cors from 'cors';
-import pdf from 'pdf-creator-node'
-import resumeInfo from './resumeInfo.js';
-import { zip } from 'zip-a-folder';
+const express = require("express");
+const puppeteer = require("puppeteer");
+const path = require("path");
+const fs = require("fs");
+const axios = require("axios");
+const cheerio = require("cheerio");
+const cors = require("cors");
+const pdf = require("pdf-creator-node");
+const resumeInfo = require("./resumeInfo.js");
+const { zip } = require("zip-a-folder");
+const routes = require("./routes.js");
 
 const app = express();
-const __dirname = path.resolve(path.dirname(''));
+// const __dirname = path.resolve(path.dirname(""));
 const PORT = process.env.PORT || 5000;
 const MyProjects = [
-    {url: 'https://brennonaleatorio.com.br',name:'brennonaleatorio.png'},
-    {url: 'https://www.hilbertfirearms.com.br/',name:'hilbertfirearms.png'},
-    {url: 'https://hogwartshmrpg.netlify.app/',name:'hogwartshmrpg.png'},
-    {url: 'http://projetos.brennonaleatorio.com.br/little-invest/',name:'littleinvest.png'},
-    {url: 'http://projetos.brennonaleatorio.com.br/DiaDaMulher/',name:'DiaDaMulher.png'},
-    {url: 'http://projetos.brennonaleatorio.com.br/Monguilhott/',name:'Monguilhott.png'},
+    { url: "https://brennonaleatorio.com.br", name: "brennonaleatorio.png" },
+    { url: "https://www.hilbertfirearms.com.br/", name: "hilbertfirearms.png" },
+    { url: "https://hogwartshmrpg.netlify.app/", name: "hogwartshmrpg.png" },
+    {
+        url: "http://projetos.brennonaleatorio.com.br/little-invest/",
+        name: "littleinvest.png",
+    },
+    {
+        url: "http://projetos.brennonaleatorio.com.br/DiaDaMulher/",
+        name: "DiaDaMulher.png",
+    },
+    {
+        url: "http://projetos.brennonaleatorio.com.br/Monguilhott/",
+        name: "Monguilhott.png",
+    },
 ];
 
-app.use(cors())
+app.use(cors());
+app.use("/", routes);
 
-app.get('/downloadImages',async(req,res)=>{
-    if(!fs.existsSync(__dirname + '/images.zip')){
-        await (async () => {
-            var dir = __dirname+'/images/'
-            !fs.existsSync(dir) && fs.mkdirSync(dir);
-            
-            for(let i = 0; i < MyProjects.length; i++){
-                var name = MyProjects[i].name;
-                var url = MyProjects[i].url;
-                try{
-                    if(!fs.existsSync(__dirname+'/images/'+name)){
-                        const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
-                        const page = await browser.newPage();
-                        await page.goto(url);
-                        await page.screenshot({path: 'images/'+name});
-                        await browser.close();
-                        
-                    }
-                } catch(err){console.log(err)}
-            }
-        })();
-        await zip(__dirname + '/images', __dirname + '/images.zip');
-    }
-    res.sendFile(__dirname+'/images.zip');
-})
+// app.get("/downloadImages", async (req, res) => {
+//     if (!fs.existsSync(__dirname + "/images.zip")) {
+//         await (async () => {
+//             var dir = __dirname + "/images/";
+//             !fs.existsSync(dir) && fs.mkdirSync(dir);
 
-app.get('/newBot',async(req, res)=>{
+//             for (let i = 0; i < MyProjects.length; i++) {
+//                 var name = MyProjects[i].name;
+//                 var url = MyProjects[i].url;
+//                 try {
+//                     if (!fs.existsSync(__dirname + "/images/" + name)) {
+//                         const browser = await puppeteer.launch({
+//                             args: ["--no-sandbox", "--disable-setuid-sandbox"],
+//                         });
+//                         const page = await browser.newPage();
+//                         await page.goto(url);
+//                         await page.screenshot({ path: "images/" + name });
+//                         await browser.close();
+//                     }
+//                 } catch (err) {
+//                     console.log(err);
+//                 }
+//             }
+//         })();
+//         await zip(__dirname + "/images", __dirname + "/images.zip");
+//     }
+//     res.sendFile(__dirname + "/images.zip");
+// });
 
-    let response = [];
-    let html = await axios.get('https://brennonaleatorio.com.br/');
+// app.get("/newBot", async (req, res) => {
+//     let response = [];
+//     let html = await axios.get("https://brennonaleatorio.com.br/");
 
-    
+//     const $ = cheerio.load(html.data);
 
-    const $ = cheerio.load(html.data);
+//     response.push($("meta").attr("href"));
 
-    response.push($('meta').attr('href'));
+//     console.log($("title").first().text());
+//     res.json({ ola: "response" });
+// });
 
-    console.log($('title').first().text());
-    res.json({'ola':'response'})
+// app.get("/reset", (req, res) => {
+//     if (fs.existsSync(__dirname + "/currículo.pdf")) {
+//         fs.rmSync(__dirname + "/currículo.pdf");
+//     }
+//     if (fs.existsSync(__dirname + "/projects.json")) {
+//         fs.rmSync(__dirname + "/projects.json");
+//     }
+//     res.send("Reset");
+// });
 
-})
+// app.get("/projects", async (req, res) => {
+//     let response = [];
+//     let file;
 
-app.get('/reset',(req,res)=>{
-    if(fs.existsSync(__dirname + '/currículo.pdf')){
-        fs.rmSync(__dirname + '/currículo.pdf');
-    }
-    if(fs.existsSync(__dirname + '/projects.json')){
-        fs.rmSync(__dirname + '/projects.json');
-    }
-    res.send('Reset')
-})
+//     if (fs.existsSync(__dirname + "/projects.json")) {
+//         file = fs.readFileSync("projects.json");
+//         file = JSON.parse(file);
+//     }
 
-app.get('/projects',async(req, res)=>{
+//     try {
+//         for (let i = 0; i < MyProjects.length; i++) {
+//             var name = MyProjects[i].name;
+//             var url = MyProjects[i].url;
 
-    let response = [];
-    let file;
+//             if (file) {
+//                 let exists = false;
+//                 for (let x = 0; x < file.length; x++) {
+//                     if (file[x] && file[x].image === name) {
+//                         response.push(file[x]);
+//                         exists = true;
+//                         break;
+//                     }
+//                 }
+//                 if (exists) continue;
+//             }
 
-    if(fs.existsSync(__dirname + '/projects.json')){
-        file = fs.readFileSync('projects.json')
-        file = JSON.parse(file)
-    }
+//             let html = await axios.get(url);
 
-    try{
-        for(let i = 0; i < MyProjects.length; i++){
-            var name = MyProjects[i].name;
-            var url = MyProjects[i].url;
+//             const $ = await cheerio.load(html.data);
+//             let description = $('meta[name="description"]')
+//                 .first()
+//                 .attr("content")
+//                 ? $('meta[name="description"]').first().attr("content")
+//                 : "Site ainda sem descrição";
+//             let title = $("title").first().text();
 
-            if(file){
-                let exists = false;
-                for(let x = 0; x < file.length; x++){
-                    if(file[x] && file[x].image === name){
-                        response.push(file[x]);
-                        exists = true;
-                        break;
-                    }
-                }
-                if(exists) continue;
-            }
+//             console.log(title);
 
-                let html = await axios.get(url);
+//             response.push({ url, title, description, image: name });
+//         }
+//     } catch (err) {
+//         console.log(err);
+//     }
 
-                const $ = await cheerio.load(html.data);
-                let description = $('meta[name="description"]').first().attr('content') ? $('meta[name="description"]').first().attr('content') : 'Site ainda sem descrição';
-                let title = $('title').first().text();
+//     fs.writeFile("projects.json", JSON.stringify(response), function (err) {
+//         if (err) return console.log(err);
+//     });
 
-                console.log(title);
-                
-                response.push({url, title, description, image:name})
-        }
-    } catch(err){console.log(err)}
+//     res.json(response);
+// });
 
-    fs.writeFile('projects.json', JSON.stringify(response), function (err) {
-        if (err) return console.log(err);
-    });
+// app.get("/resume/:isPdf?", async (req, res) => {
+//     let isPdf = req.params.isPdf;
+//     if (!isPdf) {
+//         res.json(resumeInfo);
+//         return;
+//     }
 
-    
-    res.json(response)
-})
+//     if (fs.existsSync(__dirname + "/currículo.pdf")) {
+//         res.sendFile(__dirname + "/currículo.pdf");
+//         return;
+//     }
 
-app.get('/resume/:isPdf?',async(req,res)=>{
-    let isPdf = req.params.isPdf;
-    if(!isPdf){
-        res.json(resumeInfo);
-        return;
-    }
+//     var resume = await fs.readFileSync("pdf.html", "utf8");
 
-    if(fs.existsSync(__dirname + '/currículo.pdf')){
-        res.sendFile(__dirname + '/currículo.pdf');
-        return;
-    }
+//     var options = {
+//         format: "A3",
+//         orientation: "portrait",
+//         border: "10mm",
+//     };
+//     var document = {
+//         html: resume,
+//         data: resumeInfo,
+//         path: "./currículo.pdf",
+//         type: "",
+//     };
 
-    var resume = await fs.readFileSync("pdf.html", "utf8");
+//     await pdf
+//         .create(document, options)
+//         .then((res) => {
+//             console.log(res);
+//         })
+//         .catch((error) => {
+//             console.error(error);
+//         });
 
-    var options = {
-        format: "A3",
-        orientation: "portrait",
-        border: "10mm",
-    };
-    var document = {
-        html: resume,
-        data: resumeInfo,
-        path: "./currículo.pdf",
-        type: "",
-    };
+//     await new Promise((r) => setTimeout(r, 2000));
+//     res.sendFile(__dirname + "/currículo.pdf");
+// });
 
-    await pdf
-    .create(document, options)
-    .then((res) => {
-        console.log(res);
-    })
-    .catch((error) => {
-        console.error(error);
-    });
-    
-    await new Promise(r => setTimeout(r, 2000));;
-    res.sendFile(__dirname + '/currículo.pdf');
-
-})
-
-app.listen(PORT,()=>{
-    console.log(`Running on port ${PORT}`)
-})
+app.listen(PORT, () => {
+    console.log(`Running on port ${PORT}`);
+    console.log(process.env.USER);
+    console.log(process.env.PASSWORD);
+    console.log(process.env.DATABASE);
+});

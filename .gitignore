@@ -6,6 +6,7 @@ projects.json
 currículo.pdf
 images.zip
 package-lock.json
+.vscode/
 
 ### Node ###
 # Logs

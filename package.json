@@ -1,28 +1,31 @@
 {
-  "name": "brennonaleatorioapi",
-  "version": "1.0.0",
-  "description": "API para o site https://brennonaleatorio.com.br",
-  "main": "server.js",
-  "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "dev": "nodemon"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Brennon-Oliveira/brennonaleatorioapi"
-  },
-  "author": "Brennon Gabriel de Oliveira",
-  "license": "ISC",
-  "dependencies": {
-    "axios": "^0.21.1",
-    "cheerio": "*",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "html-pdf": "^2.2.0",
-    "pdf-creator-node": "^2.2.2",
-    "puppeteer": "^9.1.1",
-    "zip-a-folder": "^1.0.1"
-  }
+    "name": "brennonaleatorioapi",
+    "version": "1.0.0",
+    "description": "API para o site https://brennonaleatorio.com.br",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node server.js",
+        "dev": "nodemon"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Brennon-Oliveira/brennonaleatorioapi"
+    },
+    "author": "Brennon Gabriel de Oliveira",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^0.21.1",
+        "cheerio": "*",
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "html-pdf": "^2.2.0",
+        "mongoose": "^5.13.3",
+        "pdf-creator-node": "^2.2.2",
+        "puppeteer": "^9.1.1",
+        "zip-a-folder": "^1.0.1"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.12"
+    }
 }

@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const pdf = require("pdf-creator-node");
+const Pdf = require("../db/Models/Pdf");
 
 class Resume {
     resumeInfo;
@@ -50,17 +51,20 @@ class Resume {
 
     downloadPdf = async (req, res) => {
         try {
+            let pdfDb = await Pdf.findOne({
+                title: "curriculo",
+            });
             res.setHeader("Content-Type", "application/pdf");
             res.setHeader(
                 "Content-Disposition",
                 "attachment; filename=currículo.pdf"
             );
 
-            if (fs.existsSync(path.resolve(__dirname, "./currículo.pdf"))) {
-                res.send(path.resolve(__dirname, "./currículo.pdf"));
+            if (pdfDb) {
+                res.send(pdfDb.pdf);
                 return;
-            } else {
             }
+
             var resume = await fs.readFileSync(
                 path.resolve(__dirname, "./pdf.html"),
                 "utf8"
@@ -88,7 +92,18 @@ class Resume {
                 });
 
             await new Promise((r) => setTimeout(r, 2000));
-            res.sendFile(path.resolve(__dirname, "./currículo.pdf"));
+
+            let file = fs.readFileSync(
+                path.resolve(__dirname, "./currículo.pdf")
+            );
+            if (file) {
+                await Pdf.create({
+                    title: "curriculo",
+                    pdf: file,
+                });
+                res.send(file);
+            }
+            // res.sendFile(path.resolve(__dirname, "./currículo.pdf"));
         } catch (err) {
             console.log(err);
         }

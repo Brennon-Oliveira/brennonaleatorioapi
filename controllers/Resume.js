@@ -66,7 +66,7 @@ class Resume {
             }
 
             var resume = await fs.readFileSync(
-                path.resolve(__dirname, "./pdf.html"),
+                process.cwd() + "/controllers/pdf.html",
                 "utf8"
             );
 
@@ -78,7 +78,7 @@ class Resume {
             var document = {
                 html: resume,
                 data: this.resumeInfo,
-                path: path.resolve(__dirname, "./currículo.pdf"),
+                path: process.cwd() + "/controllers/currículo.pdf",
                 type: "",
             };
 
@@ -95,8 +95,9 @@ class Resume {
 
             console.log("Pre READ FILE");
             let file = fs.readFileSync(
-                path.resolve(__dirname, "./currículo.pdf")
+                process.cwd() + "/controllers/currículo.pdf"
             );
+            console.log(file);
             console.log("After READ FILE");
             if (file) {
                 await Pdf.create({

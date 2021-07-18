@@ -93,9 +93,11 @@ class Resume {
 
             await new Promise((r) => setTimeout(r, 2000));
 
+            console.log("Pre READ FILE");
             let file = fs.readFileSync(
                 path.resolve(__dirname, "./currículo.pdf")
             );
+            console.log("After READ FILE");
             if (file) {
                 await Pdf.create({
                     title: "curriculo",

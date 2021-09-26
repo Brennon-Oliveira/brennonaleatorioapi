@@ -1,6 +1,6 @@
 const express = require("express");
-const Projects = require("./controllers/Projects.js");
-const Resume = require("./controllers/Resume.js");
+const Projects = require("./controllers/home/Projects.js");
+const Resume = require("./controllers/home/Resume.js");
 const routes = express.Router();
 
 routes.route("/projects").get(Projects.get);

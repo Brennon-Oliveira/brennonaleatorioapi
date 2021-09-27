@@ -1,9 +1,10 @@
+const Topic = require("../../db/Models/Topics");
+
 class Blog {
-    getTypes = () => {};
-
-    getForType = () => {};
-
-    savePost = () => {};
+    getTopics = async (req, res) => {
+        let topics = await Topic.find({});
+        res.json(topics);
+    };
 }
 
-module.exports = Blog;
+module.exports = new Blog();

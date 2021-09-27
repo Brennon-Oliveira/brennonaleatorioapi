@@ -2,7 +2,7 @@ const fs = require("fs");
 const axios = require("axios");
 const puppeteer = require("puppeteer");
 const Cheerio = require("cheerio");
-const Project = require("../db/Models/Project.js");
+const Project = require("../../db/Models/Project.js");
 const path = require("path");
 // const { __dirname } = require("../Consts.js");
 

@@ -1,3 +1,8 @@
+const result = require("dotenv").config();
+
+if (result.error) {
+    throw result.error;
+}
 const express = require("express");
 const puppeteer = require("puppeteer");
 const path = require("path");
@@ -9,6 +14,8 @@ const pdf = require("pdf-creator-node");
 const resumeInfo = require("./resumeInfo.js");
 const { zip } = require("zip-a-folder");
 const routes = require("./routes.js");
+
+console.log(result.parsed);
 
 const app = express();
 // const __dirname = path.resolve(path.dirname(""));
